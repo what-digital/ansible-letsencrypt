@@ -92,9 +92,12 @@
     become: yes
     with_items: "{{ letsencrypt_cert_domains }}"
 
+  # manually renew: /usr/local/share/letsencrypt/env/bin/letsencrypt renew -a standalone --pre-hook "service nginx stop" --post-hook "service nginx start"
   - name: Install renewal cron
     become: yes
     cron:
+      user: root
+      cron_file: letsencrypt
       name: "Let's Encrypt Renewal"
       day: "{{ letsencrypt_renewal_frequency.day }}"
       hour: "{{ letsencrypt_renewal_frequency.hour }}"
